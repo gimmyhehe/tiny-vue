@@ -1,5 +1,6 @@
 export const tinyGridSmbTheme = {
   'ti-grid-header-background-color': '#F5F5F5',
+  'ti-grid-header-font-weight': 'bold',
   'ti-grid-medium-header-column-height': '46px',
   'ti-grid-default-header-column-height': 'var(--ti-common-size-height-medium)',
   'ti-grid-small-header-column-height': 'var(--ti-common-size-height-normal)',
