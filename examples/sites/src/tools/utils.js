@@ -37,9 +37,10 @@ const pubUrl = (url) => {
 /**
  * fetch组件库示例静态文件，包括markdown、示例源码和示例配置
  * @param {string} path
+ * @param {string} isOld 3.17之前版本需要处理组件导入前缀
  * @returns
  */
-const fetchDemosFile = (path) => {
+const fetchDemosFile = (path, isOld = false) => {
   const filePath = baseUrl + path
   return fetch(filePath, {
     method: 'GET',
@@ -67,6 +68,13 @@ const fetchDemosFile = (path) => {
             return matchStr
           }
         })
+        // 处理Tiny导入前缀
+        if (isOld) {
+          text = text.replace(/import.+\{(.+)\}.+('|")@opentiny\/vue('|")/g, (...args) => {
+            const [matchStr, components] = args
+            return matchStr
+          })
+        }
         // 处理静态资源路径
         text = text.replace(/(\$\{)?import\.meta\.env\.VITE_APP_BUILD_BASE_URL(\})?/g, (str) => {
           if (str.startsWith('$')) {

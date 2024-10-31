@@ -17,7 +17,7 @@ import logoUrl from './assets/opentiny-logo.svg?url'
 import GitHub from './icons/Github.vue'
 import Share from './icons/Share.vue'
 
-const VERSION = 'tiny-vue-version-3.16'
+const VERSION = 'tiny-vue-version-3.19'
 const LAYOUT = 'playground-layout'
 const LAYOUT_REVERSE = 'playground-layout-reverse'
 
@@ -72,8 +72,9 @@ const createImportMap = (version) => {
     'sortablejs': `${cdnHost}/sortablejs${versionDelimiter}1.15.0/${fileDelimiter}modular/sortable.esm.js`
   }
   if (['aurora', 'saas'].includes(tinyTheme)) {
-    imports[`@opentiny/vue-design-${tinyTheme}`] =
-      `${cdnHost}/@opentiny/vue-design-${tinyTheme}${versionDelimiter}${version}/${fileDelimiter}index.js`
+    imports[
+      `@opentiny/vue-design-${tinyTheme}`
+    ] = `${cdnHost}/@opentiny/vue-design-${tinyTheme}${versionDelimiter}${version}/${fileDelimiter}index.js`
   }
   if (isSaas) {
     imports['@opentiny/vue-icon'] = `${getRuntime(version)}tiny-vue-icon-saas.mjs`
@@ -206,10 +207,10 @@ function getDemoName(name, apiMode) {
 }
 
 // eslint-disable-next-line unused-imports/no-unused-vars
-const getDemoCode = async ({ cmpId, fileName, apiMode, mode }) => {
+const getDemoCode = async ({ cmpId, fileName, apiMode, mode, isOld }) => {
   const demoName = getDemoName(`${getWebdocPath(cmpId)}/${fileName}`, apiMode)
   const path = tinyMode === 'mobile-first' ? `@demos/mobile-first/app/${demoName}` : `${staticDemoPath}/${demoName}`
-  const code = await fetchDemosFile(path)
+  const code = await fetchDemosFile(path, isOld)
     .then((code) => {
       return code
     })
@@ -221,7 +222,8 @@ const getDemoCode = async ({ cmpId, fileName, apiMode, mode }) => {
 }
 
 const loadFileCode = async ({ cmpId, fileName, apiMode, mode }) => {
-  const code = await getDemoCode({ cmpId, fileName, apiMode, mode })
+  const isOld = isOldVersion(latestVersion) || latestVersion === '3.16'
+  const code = await getDemoCode({ cmpId, fileName, apiMode, mode, isOld })
   store.state.mainFile = fileName
   store.state.activeFile = fileName
   store.addFile(new File(fileName, code, false))
